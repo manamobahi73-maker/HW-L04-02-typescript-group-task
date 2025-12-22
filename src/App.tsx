@@ -1,5 +1,13 @@
+import Login from "./pages/Auth/Login";
+// import Register from "./pages/Auth/Register";
+
 function App() {
-  return <>task manager project</>;
+  return (
+    <>
+      <Login />
+      {/* <Register /> */}
+    </>
+  );
 }
 
 export default App;
