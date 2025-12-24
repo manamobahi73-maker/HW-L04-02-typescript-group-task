@@ -1,18 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import React from "react";
-
-// Layouts & Pages
 import Layout from "../Layout/layout";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
-import Dashboard from "../pages/Dashboard"; // فرض می‌کنیم این همان لیست پروژه‌هاست
+import Dashboard from "../pages/Dashboard";
 import NewProject from "../pages/NewProject";
 import ProjectTasks from "../pages/ProjectTasks";
+import ProjectsList from "../pages/ProjectsList";
 
 export const router = createBrowserRouter([
-  // Public Routes
   {
-    path: "/login", // بهتر است حروف کوچک باشد
+    path: "/login",
     element: <Login />,
   },
   {
@@ -20,21 +18,20 @@ export const router = createBrowserRouter([
     element: <Register />,
   },
 
-  // Protected Routes (Main App)
   {
     path: "/",
     element: <Layout />,
     children: [
       {
         index: true,
-        element: <Dashboard />, // اینجا لیست همه پروژه‌ها نمایش داده می‌شود
+        element: <ProjectsList />,
       },
       {
         path: "projects/new",
         element: <NewProject />,
       },
       {
-        path: "projects/:projectId", // داینامیک روت برای تسک‌های هر پروژه
+        path: "projects/:projectId/tasks",
         element: <ProjectTasks />,
       },
     ],
