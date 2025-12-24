@@ -3,7 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { deleteTask, updateTaskStatus } from "../../redux/Slices/TasksSlice";
-import { TaskType, TaskStatus } from "../../components/types/taskType";
+import {
+  TaskType,
+  TaskStatus,
+  TaskPriority,
+} from "../../components/types/taskType";
 import TaskForm from "../../components/TaskComponents/TaskForm";
 import TaskCard from "../../components/TaskComponents/TaskCard";
 
@@ -19,9 +23,18 @@ const ProjectTasks = () => {
   const tasks = useSelector((state: RootState) =>
     state.tasks.filter((task) => task.projectId === projectId)
   );
+  const users = useSelector((state: RootState) => state.users);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<TaskType | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
+  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "all">(
+    "all"
+  );
+  const [assigneeFilter, setAssigneeFilter] = useState<string>("all");
+  const [startDateFilter, setStartDateFilter] = useState<string>("");
+  const [endDateFilter, setEndDateFilter] = useState<string>("");
 
   const handleAddTask = () => {
     setEditingTask(null);
@@ -43,9 +56,54 @@ const ProjectTasks = () => {
     dispatch(updateTaskStatus({ id: taskId, status: newStatus }));
   };
 
-  const todoTasks = tasks.filter((t) => t.status === "todo");
-  const doingTasks = tasks.filter((t) => t.status === "doing");
-  const doneTasks = tasks.filter((t) => t.status === "done");
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setStatusFilter("all");
+    setPriorityFilter("all");
+    setAssigneeFilter("all");
+    setStartDateFilter("");
+    setEndDateFilter("");
+  };
+
+  // Filter tasks by all criteria
+  const filteredTasks = tasks.filter((task) => {
+    // Search query filter
+    if (
+      searchQuery &&
+      !task.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
+      return false;
+    }
+
+    // Status filter
+    if (statusFilter !== "all" && task.status !== statusFilter) {
+      return false;
+    }
+
+    // Priority filter
+    if (priorityFilter !== "all" && task.priority !== priorityFilter) {
+      return false;
+    }
+
+    // Assignee filter
+    if (assigneeFilter !== "all" && task.assignedTo !== assigneeFilter) {
+      return false;
+    }
+
+    // Date range filter
+    if (startDateFilter && task.deadline < startDateFilter) {
+      return false;
+    }
+    if (endDateFilter && task.deadline > endDateFilter) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const todoTasks = filteredTasks.filter((t) => t.status === "todo");
+  const doingTasks = filteredTasks.filter((t) => t.status === "doing");
+  const doneTasks = filteredTasks.filter((t) => t.status === "done");
 
   if (!project) {
     return (
@@ -87,6 +145,117 @@ const ProjectTasks = () => {
           >
             Add Task
           </button>
+        </div>
+
+        <div className="mb-6 bg-white p-6 rounded-lg shadow">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-700">
+              Filter Tasks
+            </h3>
+            <button
+              onClick={handleResetFilters}
+              className="text-sm text-blue-600 hover:text-blue-700 underline"
+            >
+              Reset Filters
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Search by title
+              </label>
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
+              <select
+                value={statusFilter}
+                onChange={(e) =>
+                  setStatusFilter(e.target.value as TaskStatus | "all")
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">All Statuses</option>
+                <option value="todo">Todo</option>
+                <option value="doing">Doing</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Priority
+              </label>
+              <select
+                value={priorityFilter}
+                onChange={(e) =>
+                  setPriorityFilter(e.target.value as TaskPriority | "all")
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">All Priorities</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Assigned to
+              </label>
+              <select
+                value={assigneeFilter}
+                onChange={(e) => setAssigneeFilter(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">All Members</option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Due date from
+              </label>
+              <input
+                type="date"
+                value={startDateFilter}
+                onChange={(e) => setStartDateFilter(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Due date to
+              </label>
+              <input
+                type="date"
+                value={endDateFilter}
+                onChange={(e) => setEndDateFilter(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 text-sm text-gray-600">
+            Showing {filteredTasks.length} of {tasks.length} tasks
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

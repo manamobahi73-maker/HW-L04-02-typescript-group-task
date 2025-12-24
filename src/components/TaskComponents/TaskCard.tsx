@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import { TaskType, TaskStatus } from "../types/taskType";
 
 interface TaskCardProps {
@@ -14,9 +16,16 @@ const TaskCard = ({
   onDelete,
   onStatusChange,
 }: TaskCardProps) => {
+  const users = useSelector((state: RootState) => state.users);
+
   const formattedDeadline = useMemo(() => {
     return new Date(task.deadline).toLocaleDateString();
   }, [task.deadline]);
+
+  const assignedUser = useMemo(() => {
+    const user = users.find((u) => u.id === task.assignedTo);
+    return user ? user.name : task.assignedTo;
+  }, [users, task.assignedTo]);
 
   const getPriorityColor = (priority: TaskType["priority"]) => {
     switch (priority) {
@@ -45,7 +54,7 @@ const TaskCard = ({
       </div>
       <p className="text-sm text-gray-600 mb-3">{task.description}</p>
       <div className="text-xs text-gray-500 space-y-1 mb-3">
-        <div>Assigned to: {task.assignedTo}</div>
+        <div>Assigned to: {assignedUser}</div>
         <div>Deadline: {formattedDeadline}</div>
       </div>
       <div className="flex gap-2">

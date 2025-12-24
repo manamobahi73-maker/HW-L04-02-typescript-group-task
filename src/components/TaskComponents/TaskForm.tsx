@@ -156,7 +156,7 @@ const TaskForm = ({ projectId, editingTask, onClose }: TaskFormProps) => {
               >
                 <option value="">Select user</option>
                 {mockUsers.map((user) => (
-                  <option key={user.id} value={user.name}>
+                  <option key={user.id} value={user.id}>
                     {user.name}
                   </option>
                 ))}
