@@ -24,7 +24,7 @@ const ProjectsList = () => {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Projects</h1>
           <button
-            onClick={() => navigate("/new-project")}
+            onClick={() => navigate("/projects/new")}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             New Project
