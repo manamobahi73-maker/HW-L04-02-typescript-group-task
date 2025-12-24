@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
@@ -5,6 +6,13 @@ import { RootState } from "../../redux/store";
 const ProjectsList = () => {
   const projects = useSelector((state: RootState) => state.projects);
   const navigate = useNavigate();
+
+  const projectsWithFormattedDate = useMemo(() => {
+    return projects.map((project) => ({
+      ...project,
+      formattedDate: new Date(project.createdAt).toLocaleDateString(),
+    }));
+  }, [projects]);
 
   const handleProjectClick = (projectId: string) => {
     navigate(`/projects/${projectId}/tasks`);
@@ -31,17 +39,19 @@ const ProjectsList = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
+            {projectsWithFormattedDate.map((project) => (
               <div
                 key={project.id}
                 onClick={() => handleProjectClick(project.id)}
                 className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer border border-gray-200"
               >
+                <div className="text-xs text-gray-500 mb-3">
+                  {project.formattedDate}
+                </div>
                 <h2 className="text-xl font-semibold text-gray-800 mb-2">
                   {project.title}
                 </h2>
                 <p className="text-gray-600 mb-4">{project.description}</p>
-               
               </div>
             ))}
           </div>
