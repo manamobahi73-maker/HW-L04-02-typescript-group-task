@@ -25,15 +25,7 @@ interface TaskFormData {
 const TaskForm = ({ projectId, editingTask, onClose }: TaskFormProps) => {
   const dispatch = useDispatch();
   const today = useMemo(() => new Date(), []);
-  // TO DO: Replace with real users from the store
   const users = useSelector((state: RootState) => state.users);
-
-  // Mock users for testing
-  const mockUsers = [
-    { id: "1", name: "John Doe", email: "john@example.com" },
-    { id: "2", name: "Jane Smith", email: "jane@example.com" },
-    { id: "3", name: "Bob Johnson", email: "bob@example.com" },
-  ];
 
   const {
     register,
@@ -155,7 +147,7 @@ const TaskForm = ({ projectId, editingTask, onClose }: TaskFormProps) => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select user</option>
-                {mockUsers.map((user) => (
+                {users.map((user) => (
                   <option key={user.id} value={user.id}>
                     {user.name}
                   </option>
