@@ -7,10 +7,15 @@ import NewProject from "./pages/NewProject";
 
 function App() {
   const projects = useSelector((state: RootState) => state.projects);
+  const tasks = useSelector((state: RootState) => state.tasks);
 
   useEffect(() => {
     localStorage.setItem("projects", JSON.stringify(projects));
   }, [projects]);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <>

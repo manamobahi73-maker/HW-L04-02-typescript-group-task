@@ -26,12 +26,9 @@ const projectsSlice = createSlice({
         state[index] = action.payload;
       }
     },
-    clearProjects: () => {
-      return [];
-    },
   },
 });
 
-export const { addProject, deleteProject, updateProject, clearProjects } =
+export const { addProject, deleteProject, updateProject } =
   projectsSlice.actions;
 export default projectsSlice.reducer;
