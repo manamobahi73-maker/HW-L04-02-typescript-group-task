@@ -2,7 +2,7 @@ import Layout from "../Layout/layout";
 import React from "react";
 import NewProject from "../pages/NewProject";
 import ProjectsList from "../pages/ProjectsList";
-import Login from "../pages/Login";
+import Login from "../pages/Auth/Login";
 import Dashboard from "../pages/Dashboard";
 import { createBrowserRouter } from "react-router-dom";
 export const router=createBrowserRouter([
