@@ -6,7 +6,7 @@ import { RootState } from "../../redux/store";
 const ProjectsList = () => {
   const projects = useSelector((state: RootState) => state.projects);
   const navigate = useNavigate();
-
+  const user = useSelector((state: RootState) => state.auth.currentUser);
   const projectsWithFormattedDate = useMemo(() => {
     return projects.map((project) => ({
       ...project,
@@ -22,9 +22,14 @@ const ProjectsList = () => {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Projects</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">Projects</h1>
+            <p className="text-gray-500 mt-1">
+              Welcome back, {user?.name || "User"}!
+            </p>
+          </div>{" "}
           <button
-            onClick={() => navigate("/new-project")}
+            onClick={() => navigate("/projects/new")}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             New Project

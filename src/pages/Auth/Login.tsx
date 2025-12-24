@@ -97,7 +97,7 @@ const Login = () => {
             </div>
 
             {loginError && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm text-center">
                 {loginError}
               </div>
             )}
@@ -112,7 +112,10 @@ const Login = () => {
 
           <p className="text-center text-gray-600 mt-6">
             Don't have an account?{" "}
-            <Link to="/register" className="text-blue-600 hover:text-blue-700">
+            <Link
+              to="/register"
+              className="text-blue-600 hover:text-blue-700 font-medium"
+            >
               Register
             </Link>
           </p>
