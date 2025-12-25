@@ -3,7 +3,14 @@ import { TaskType } from "../../components/types/taskType";
 
 const loadTasksFromLocalStorage = (): TaskType[] => {
   const savedTasks = localStorage.getItem("tasks");
-  return savedTasks ? JSON.parse(savedTasks) : [];
+  if (!savedTasks || savedTasks === "undefined" || savedTasks === "null") {
+    return [];
+  }
+  try {
+    return JSON.parse(savedTasks);
+  } catch {
+    return [];
+  }
 };
 
 const initialState: TaskType[] = loadTasksFromLocalStorage();

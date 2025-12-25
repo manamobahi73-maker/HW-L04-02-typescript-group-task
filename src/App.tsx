@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { router } from "./routes";
-import { RouterProvider } from "react-router-dom"; 
-import { RootState } from "./redux/store"; 
+import { RouterProvider } from "react-router-dom";
+import { RootState } from "./redux/store";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const projects = useSelector((state: RootState) => state.projects);
   const tasks = useSelector((state: RootState) => state.tasks);
@@ -21,7 +23,10 @@ function App() {
   }, [users]);
 
   return (
-    <RouterProvider router={router} />
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </>
   );
 }
 

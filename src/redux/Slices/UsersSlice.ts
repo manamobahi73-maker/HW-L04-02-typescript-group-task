@@ -1,26 +1,22 @@
-import {createSlice , PayloadAction} from '@reduxjs/toolkit';
-import {UserType} from '../../components/types/userType';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { UserType } from "../../components/types/userType";
 
-const loadUsers = (): UserType[] => {
+const loadUsersFromLocalStorage = (): UserType[] => {
   const savedUsers = localStorage.getItem("users");
-  if (savedUsers) {
-    return JSON.parse(savedUsers);
+  if (!savedUsers || savedUsers === "undefined" || savedUsers === "null") {
+    return [];
   }
-  return [
-    {
-        id: "1",
-        name: 'Manager',
-        email: "admin@gmail.com",
-        password: "123",
-        role: 'admin',
-    }
-  ];
+  try {
+    return JSON.parse(savedUsers);
+  } catch {
+    return [];
+  }
 };
 
-const initialState: UserType[] = loadUsers();
+const initialState: UserType[] = loadUsersFromLocalStorage();
 
 export const UsersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     addUser: (state, action: PayloadAction<UserType>) => {
@@ -33,10 +29,10 @@ export const UsersSlice = createSlice({
       });
     },
     removeUser: (state, action: PayloadAction<string>) => {
-      return state.filter(user => user.id !== action.payload);
+      return state.filter((user) => user.id !== action.payload);
     },
     updateUser: (state, action: PayloadAction<UserType>) => {
-      const index = state.findIndex(user => user.id === action.payload.id);
+      const index = state.findIndex((user) => user.id === action.payload.id);
       if (index !== -1) {
         state[index] = action.payload;
       }
@@ -44,6 +40,6 @@ export const UsersSlice = createSlice({
   },
 });
 
-export const {addUser, removeUser, updateUser} = UsersSlice.actions;
+export const { addUser, removeUser, updateUser } = UsersSlice.actions;
 
 export default UsersSlice.reducer;
