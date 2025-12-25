@@ -1,15 +1,23 @@
 import {createSlice , PayloadAction} from '@reduxjs/toolkit';
 import {UserType} from '../../components/types/userType';
 
-const initialState: UserType[] = [
+const loadUsers = (): UserType[] => {
+  const savedUsers = localStorage.getItem("users");
+  if (savedUsers) {
+    return JSON.parse(savedUsers);
+  }
+  return [
     {
         id: "1",
-        name: 'John Doe',
-        email: "info@example.com",
+        name: 'Manager',
+        email: "admin@gmail.com",
         password: "123",
-        role: 'user',
+        role: 'admin',
     }
-];
+  ];
+};
+
+const initialState: UserType[] = loadUsers();
 
 export const UsersSlice = createSlice({
   name: 'users',
