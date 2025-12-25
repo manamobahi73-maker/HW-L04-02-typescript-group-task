@@ -3,11 +3,11 @@ import { UserType } from "../../components/types/userType";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/Slices/UsersSlice";
 import { nanoid } from "@reduxjs/toolkit";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type RegisterFormInputs = Omit<UserType, "id">;
 
-const Register = () => {
+const NewUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -21,14 +21,12 @@ const Register = () => {
     const newUser: UserType = {
       id: nanoid(),
       ...data,
-      role:'user'
     };
-
     dispatch(addUser(newUser));
     reset();
-    alert("Registration successful!");
+    alert('member added successfully!')
     setTimeout(() => {
-      navigate("/login");
+      navigate("/users");
     }, 1000);
   };
 
@@ -36,10 +34,8 @@ const Register = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Register</h1>
-          <p className="text-gray-600 mt-2">
-            Create a new account to get started
-          </p>
+          <h2 className="text-3xl font-bold text-gray-800">Add New Member</h2>
+         
         </div>
 
         <div className="bg-white p-8 rounded-lg shadow-md">
@@ -107,24 +103,40 @@ const Register = () => {
               )}
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              Register
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Role
+              </label>
+              <select
+                {...register("role", { required: "Role is required" })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+               <option value="user">Member (Normal)</option>
+            <option value="admin">Manager (Admin)</option>
+              </select>
+              {errors.role && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  {errors.role.message}
+                </span>
+              )}
+            </div>
+
+             <div className="flex gap-4 mt-6">
+            <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 flex-1">
+                Add User
             </button>
+            <button type="button" onClick={() => navigate("/users")} className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 flex-1">
+                Cancel
+            </button>
+        </div>
           </form>
 
-          <p className="text-center text-gray-600 mt-6">
-            Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 hover:text-blue-700">
-              Login
-            </Link>
-          </p>
+    
         </div>
+     
       </div>
     </div>
   );
 };
 
-export default Register;
+export default NewUser;
