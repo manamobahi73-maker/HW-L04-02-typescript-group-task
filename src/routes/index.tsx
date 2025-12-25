@@ -33,12 +33,9 @@ export const router = createBrowserRouter([
             index: true,
             element: <ProjectsList />,
           },
+        
           {
-            path: "projects/new",
-            element: <NewProject />,
-          },
-          {
-            path: "projects/:projectId",
+            path: "projects/:projectId/tasks",
             element: <ProjectTasks />,
           },
 
@@ -53,6 +50,10 @@ export const router = createBrowserRouter([
                 path: "users/new",
                 element: <NewUser />,
               },
+                {
+            path: "projects/new",
+            element: <NewProject />,
+          },
             ],
           },
         ],
