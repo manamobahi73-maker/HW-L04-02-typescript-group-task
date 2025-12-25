@@ -4,12 +4,28 @@ import { UserType } from "../../components/types/userType";
 const loadUsersFromLocalStorage = (): UserType[] => {
   const savedUsers = localStorage.getItem("users");
   if (!savedUsers || savedUsers === "undefined" || savedUsers === "null") {
-    return [];
+    return [
+      {
+        id: "1",
+        name: "Manager",
+        email: "admin@gmail.com",
+        password: "123",
+        role: "admin",
+      },
+    ];
   }
   try {
     return JSON.parse(savedUsers);
   } catch {
-    return [];
+    return [
+      {
+        id: "1",
+        name: "Manager",
+        email: "admin@gmail.com",
+        password: "123",
+        role: "admin",
+      },
+    ];
   }
 };
 
