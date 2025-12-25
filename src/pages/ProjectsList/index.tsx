@@ -2,11 +2,15 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
+import { useDeadlineNotifications } from "../../hooks/useDeadlineNotifications";
 
 const ProjectsList = () => {
   const projects = useSelector((state: RootState) => state.projects);
+  const tasks = useSelector((state: RootState) => state.tasks);
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.currentUser);
+
+  useDeadlineNotifications(tasks, projects, navigate);
   const projectsWithFormattedDate = useMemo(() => {
     return projects.map((project) => ({
       ...project,

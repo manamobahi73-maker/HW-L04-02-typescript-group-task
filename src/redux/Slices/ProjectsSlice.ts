@@ -3,7 +3,18 @@ import { ProjectType } from "../../components/types/projectType";
 
 const loadProjectsFromLocalStorage = (): ProjectType[] => {
   const savedProjects = localStorage.getItem("projects");
-  return savedProjects ? JSON.parse(savedProjects) : [];
+  if (
+    !savedProjects ||
+    savedProjects === "undefined" ||
+    savedProjects === "null"
+  ) {
+    return [];
+  }
+  try {
+    return JSON.parse(savedProjects);
+  } catch {
+    return [];
+  }
 };
 
 const initialState: ProjectType[] = loadProjectsFromLocalStorage();
