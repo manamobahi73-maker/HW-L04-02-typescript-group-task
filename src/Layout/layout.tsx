@@ -24,9 +24,11 @@ const Layout = () => {
           <NavLink to="/" className={getLinkClass}>
             Dashboard
           </NavLink>
-          <NavLink to="/projects/new" className={getLinkClass}>
-            New Project
-          </NavLink>
+              {user?.role === "admin" && (
+            <NavLink to="/projects/new" className={getLinkClass}>
+              New Project
+            </NavLink>
+          )}
           {user?.role === "admin" && (
             <NavLink to="/users" className={getLinkClass}>
               Users Management
