@@ -10,6 +10,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useDeadlineNotifications } from "../../hooks/useDeadlineNotifications";
 
 const ProjectsList = () => {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ const ProjectsList = () => {
       { name: "Done", value: done, color: "#4ADE80" },
     ];
   }, [allTasks]);
+
+  useDeadlineNotifications(allTasks, projects, navigate);
 
   const projectsWithFormattedDate = useMemo(() => {
     return projects.map((project) => ({
@@ -150,7 +153,7 @@ const ProjectsList = () => {
                 <div className="pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400 mt-auto">
                   <span> {project.formattedDate}</span>
                   <span className="text-indigo-600 font-medium group-hover:underline">
-                    View Board 
+                    View Board
                   </span>
                 </div>
               </div>
